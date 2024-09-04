@@ -1,0 +1,36 @@
+{
+    "class": "ADC",
+    "updateMode": "selective",
+    "schemaVersion": "3.46.0",
+    "id": "declarationId",
+    "label": "theDeclaration",
+    "remark": "All properties declaration",
+    "SHQ_02": {
+        "class": "Tenant",
+        "A1": {
+            "class": "Application",
+            "VS1": {
+                "class": "Service_UDP",
+                "protocol": "udp",
+                "virtualPort":  {"bigip": "/Common/Shared/test.port.list"} ,
+                "virtualAddresses": [
+                    "10.1.1.13"
+                ],
+                "pool": {"bigip": "/Common/Shared/poolRoundRobin"}
+            }
+        },
+	      "A2": {
+            "class": "Application",
+            "VS2": {
+                "class": "Service_HTTPS",
+                "virtualPort": 443,
+                "virtualAddresses": [
+                    "10.1.1.14"
+                ],
+		        "clientTLS": "/Common/Shared/TlsClient_Local",
+		        "serverTLS": "/Common/Shared/TlsServer_Local",
+            "pool": {"bigip": "/Common/Shared/poolRoundRobin"}
+            }
+	      }
+    }
+}
