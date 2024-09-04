@@ -1,0 +1,57 @@
+---
+- name: DEPLOY AS3 playbook
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    Certificate: "{{ lookup('file', './test.crt') }}"
+    Key: "{{ lookup('file', './test.key') }}"
+
+  vars_files:
+          - ../creds/creds.yaml
+
+  tasks:
+  - set_fact:
+      sharedObjects: "{{ lookup('template', './sharedObjects.j2', split_lines=false  ) }}"
+
+
+  - name: Debug fact output
+    debug:
+      msg: "MY fact {{ sharedObjects }} and the Cert= {{ Certificate}}"
+
+  - name: Create shared objects
+    uri:
+      url: https://10.1.1.19:8443/mgmt/shared/appsvcs/declare
+      user: "{{ username }}"
+      password: "{{ password }}"
+      method: POST
+      body: "{{ sharedObjects }}"
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
+    register: shared_output
+
+  - name: Debug AS3 output
+    debug:
+      msg: "MY AS3 detail {{ shared_output }}"
+
+  - name: Create application
+    uri:
+      url: https://10.1.1.19:8443/mgmt/shared/appsvcs/declare
+      user: "{{ username }}"
+      password: "{{ password }}"
+      method: POST
+      body: "{{ lookup('file','AS3.json') }}"
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
+    register: as3_output
+
+  - name: Debug AS3 output
+    debug:
+      msg: "MY AS3 detail {{ as3_output.json }}"
+
+...
