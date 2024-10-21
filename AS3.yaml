@@ -7,6 +7,7 @@
   vars:
     Certificate: "{{ lookup('file', './test.crt') }}"
     Key: "{{ lookup('file', './test.key') }}"
+    Bundle: "{{ lookup('file', './test-shq.crt') }}"
 
   vars_files:
           - ../creds/creds.yaml
